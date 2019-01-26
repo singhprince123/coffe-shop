@@ -21,9 +21,33 @@ document.querySelector('.navBtn').addEventListener('click', ()=>{
 //control video
 document.querySelector('.video__switch').addEventListener('click',()=>{
     ui.videoControls();
+});
+
+// submit form 
+
+document.querySelector('.drink-form').addEventListener('submit', ()=>{
+    const fname = document.querySelector('.input-name').value;
+    const lastname = document.querySelector('.input-lastname').value;
+    const email = document.querySelector('.input-email').value;
+    let value = ui.checkEmpty(fname, lastname, email);
+    console.log(value)
+    if(value){
+    let customer = new Customer( fname ,lastname , email);
+     ui.addCustomer(customer);
+     ui.showFeedback('customer added to list', 'success');
+     ui.clearFields();
+    }else{
+    ui.showFeedback('some form values empty', "error")
+    }
 })
 }
 
+//claer fields
+UI.prototype.clearFields = function(){
+     document.querySelector('.input-name').value = "";
+     document.querySelector('.input-lastname').value = "";
+     document.querySelector('.input-email').value ="";
+}
 
 function UI(){
 
@@ -46,6 +70,54 @@ UI.prototype.videoControls = function(){
     }
 }
 
+UI.prototype.checkEmpty = (fname ,lastname ,email)=> {
+    let result;
+    if(fname === '' || lastname === '' || email ===''){
+        result = false;
+    }else {
+        result = true;
+    }
+  return result;
+}
 
 
+UI.prototype.showFeedback = function(text, type) {
+if(type === 'success'){
+    let feedback = document.querySelector('.drink-form__feedback');
+    feedback.classList.add('success');
+    feedback.innerHTML = text;
+    this.removeAlert('success')
+}else if(type === 'error'){
+   let feedback = document.querySelector('.drink-form__feedback');
+   feedback.classList.add('error');
+   feedback.innerHTML = text;
+   this.removeAlert('error')
+}
+}
+//remove alert
+UI.prototype.removeAlert = function(type)  {
+    setTimeout( function(){
+    document.querySelector('.drink-form__feedback').classList.remove(type)
+    }, 3000)
+}
+
+
+UI.prototype.addCustomer = function(customer){
+    const images = [1, 2,3,4,5];
+    let random = Math.floor(Math.random() * images.length);
+    const div = document.createElement('div');
+    div.classList.add('person');
+    div.innerHTML = `<img src="img/person-${random}.jpeg" alt="person" class="person-thumbnail">
+    <h4 class="person_name">${customer.name}</h4>
+    <h4 class="person_last-name">${customer.lastname}</h4>`
+    document.querySelector('.drink-card__list').appendChild(div)
+     
+}
+
+
+function Customer( name  , lastname, email){
+    this.name =name;
+    this.lastname = lastname;
+    this.email = email
+}
 
