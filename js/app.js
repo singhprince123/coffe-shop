@@ -25,7 +25,8 @@ document.querySelector('.video__switch').addEventListener('click',()=>{
 
 // submit form 
 
-document.querySelector('.drink-form').addEventListener('submit', ()=>{
+document.querySelector('.drink-form').addEventListener('submit', (e)=>{
+    e.preventDefault();
     const fname = document.querySelector('.input-name').value;
     const lastname = document.querySelector('.input-lastname').value;
     const email = document.querySelector('.input-email').value;
@@ -40,7 +41,24 @@ document.querySelector('.drink-form').addEventListener('submit', ()=>{
     ui.showFeedback('some form values empty', "error")
     }
 })
+
+//display modal 
+
+const links  = document.querySelectorAll('.work-item__icon');
+
+links.forEach( item => item.addEventListener('click', (e)=> {
+    ui.showModal(e)
+}))
+
+
+//hide modal
+
+document.querySelector('.work-modal__close').addEventListener('click',(e)=> {
+   ui.hideModal(e);
+})
 }
+
+
 
 //claer fields
 UI.prototype.clearFields = function(){
@@ -82,13 +100,12 @@ UI.prototype.checkEmpty = (fname ,lastname ,email)=> {
 
 
 UI.prototype.showFeedback = function(text, type) {
+    const feedback = document.querySelector('.drink-form__feedback');
 if(type === 'success'){
-    let feedback = document.querySelector('.drink-form__feedback');
     feedback.classList.add('success');
     feedback.innerHTML = text;
     this.removeAlert('success')
 }else if(type === 'error'){
-   let feedback = document.querySelector('.drink-form__feedback');
    feedback.classList.add('error');
    feedback.innerHTML = text;
    this.removeAlert('error')
@@ -112,6 +129,31 @@ UI.prototype.addCustomer = function(customer){
     <h4 class="person_last-name">${customer.lastname}</h4>`
     document.querySelector('.drink-card__list').appendChild(div)
      
+}
+
+
+//show modal
+
+UI.prototype.showModal = function(e){
+    e.preventDefault();
+   if(e.target.parentElement.classList.contains('work-item__icon')){
+       let id = e.target.parentElement.dataset.id;
+       console.log(id);
+       const modal = document.querySelector('.work-modal');
+       const modalItem = document.querySelector('.work-modal__item');
+
+       modal.classList.add('work-modal-show');
+       modalItem.style.background = `url(img/work-${id}.jpeg`
+
+   }
+
+}
+
+
+//hide modal 
+
+UI.prototype.hideModal = function(e) {
+   document.querySelector('.work-modal').classList.remove('work-modal-show')
 }
 
 
