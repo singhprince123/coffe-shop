@@ -9,6 +9,10 @@
   --grey: #a9b2ac;
 }
 
+html {
+    scroll-behavior: smooth;
+  }
+  
 * {
   margin: 0;
   padding: 0;
